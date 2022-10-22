@@ -118,40 +118,33 @@ input("Нажмите Enter для выхода!")
 
 
 #4.Реализуйте RLE алгоритм: реализуйте модуль сжатия и восстановления данных.
-with open('42_RLE1_decoded.txt', 'r') as data:
-    my_text = data.read()
+# На сжатие входные данные: WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWBWWWWWWWWWWWWWW
+# Выходные данные:          12W1B12W3B24W1B14W
 
-def encode_rle(ss):
-    str_code = ''
-    prev_char = ''
+def coding(txt):
     count = 1
-    for char in ss:
-        if char != prev_char:
-            if prev_char:
-                str_code += str(count) + prev_char
-            count = 1
-            prev_char = char
-        else:
+    res = ''
+    for i in range(len(txt)-1):
+        if txt[i] == txt[i+1]:
             count += 1
-    return str_code
-
-            
-str_code = encode_rle(my_text)
-print(str_code)
-
-with open('42_RLE2_encoded.txt', 'r') as data:
-    my_text2 = data.read()
-
-def decoding_rle(ss:str):
-    count = ''
-    str_decode = ''
-    for char in ss:
-        if char.isdigit():
-            count += char 
         else:
-            str_decode += char * int(count)
-            count = ''
-    return str_decode
+            res = res + str(count) + txt[i]
+            count = 1
+    if count > 1 or (txt[len(txt)-2] != txt[-1]):
+        res = res + str(count) + txt[-1]
+    return res
 
-str_decode = decoding_rle(my_text2)
-print(str_decode)
+def decoding(txt):
+    number = ''
+    res = ''
+    for i in range(len(txt)):
+        if not txt[i].isalpha():
+            number += txt[i]
+        else:
+            res = res + txt[i] * int(number)
+            number = ''
+    return res
+
+s = input("Введите текст для кодировки: ")
+print(f"Текст после кодировки: {coding(s)}")
+print(f"Текст после дешифровки: {decoding(coding(s))}")
